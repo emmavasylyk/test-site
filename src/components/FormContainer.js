@@ -115,15 +115,24 @@ const FormContainer = () => {
     const validatedLoanTerm = await validateField(loanTerm, setLoanTerm);
     const validatiedLoanArp = await validateField(loanArp, setLoanArp);
 
-    console.log('validatedPrice', validatedPrice);
     if (
       validatedPrice &&
       validatedPayment &&
       validatedLoanTerm &&
       validatiedLoanArp
     ) {
-      console.log('Form is fully validated');
       calculateValues();
+    }
+  };
+
+  const handleDownPayment = e => {
+    if (
+      e.target.value > purchasePrice * 0.2 &&
+      e.target.value < purchasePrice
+    ) {
+      setDownPayment(e.target.value);
+    } else {
+      return;
     }
   };
 
@@ -136,7 +145,6 @@ const FormContainer = () => {
         [monthlyInterestRate * (1 + monthlyInterestRate) ** numberOfPayment]) /
       [(1 + monthlyInterestRate) ** numberOfPayment - 1];
     setMonthlyPayment(mounthlyPrice);
-    console.log({ borrow });
   };
 
   const validateField = (field, setValue) => {
@@ -159,7 +167,7 @@ const FormContainer = () => {
       <h1>Mortgage Calculator</h1>
       <form>
         <InputSection>
-          <label>Purchase Price</label>
+          <label>Purchase Price ($)</label>
           <Error>{purchasePrice.error}</Error>
           <input
             onChange={e => {
@@ -169,12 +177,14 @@ const FormContainer = () => {
           />
         </InputSection>
         <InputSection>
-          <label>Down Payment</label>
+          <label>Down Payment ($)</label>
           <Error>{downPayment.error}</Error>
           <input
-            onChange={e => {
-              setDownPayment(e.target.value);
-            }}
+            placeholder="Please enter at least 20% of purchase price"
+            onChange={handleDownPayment}
+            // onChange={e => {
+            //   setDownPayment(e.target.value);
+            // }}
             type="text"
           />
         </InputSection>

@@ -4,6 +4,7 @@ import './App.css';
 import styled from 'styled-components';
 import backgroundImg from './image/background.jpg';
 import FormContainer from './components/FormContainer';
+import CardContainer from './components/CardContainer';
 
 const Container = styled.div`
   background: url(${backgroundImg});
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <Container>
       <FormContainer />
+      <CardContainer />
     </Container>
   );
 }
