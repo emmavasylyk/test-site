@@ -11,16 +11,16 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import contactsReducer from './contacts/contactSlice';
+import clientsReducer from './client/clientSlice';
 
-const contactsPersistConfig = {
-  key: 'contacts',
+const clientsPersistConfig = {
+  key: 'client',
   storage,
 };
 
 export const store = configureStore({
   reducer: {
-    contacts: persistReducer(contactsPersistConfig, contactsReducer),
+    clients: persistReducer(clientsPersistConfig, clientsReducer),
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

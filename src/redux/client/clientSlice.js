@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { createReducer } from '@reduxjs/toolkit';
-import actions from './contacts-actions';
+import actions from './client-actions';
 
-const initialContacts = [
+const initialClient = [
   {
     id: 'id-1',
     purchasePrice: 100000,
@@ -14,10 +14,8 @@ const initialContacts = [
   },
 ];
 
-const items = createReducer(initialContacts, {
-  [actions.addContact]: (state, { payload }) => {
-    console.log('payload', payload);
-    console.log('state', state);
+const items = createReducer(initialClient, {
+  [actions.addClient]: (state, { payload }) => {
     return [...state, payload];
   },
 });

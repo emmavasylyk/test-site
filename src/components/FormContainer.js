@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import numeral from 'numeral';
 import { useLocaleStorage } from '../hooks/useLocaleStorage';
 import { nanoid } from 'nanoid';
 import { useDispatch } from 'react-redux';
-import contactsActions from '../redux/contacts/contacts-actions';
+import clientsActions from '../redux/client/client-actions';
+import { ImArrowLeft } from 'react-icons/im';
 
 const Container = styled.div`
   display: flex;
@@ -15,6 +16,39 @@ const Container = styled.div`
   padding: 3rem 0;
   max-width: 900px;
   margin: auto;
+
+  button.button-goback {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0 auto;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px;
+    height: 68px;
+    box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
+      0 6px 6px -1px rgba(8, 11, 14, 0.1);
+    transition: all 0.3s ease-in-out;
+    border: none;
+
+      .button-goback-icon{
+        margin-right: 15px;
+  }
+
+    &:hover,
+    &:focus {
+      color: #2a6279;
+      background-color: #fff;
+    }
+  }  
+  }
 
   h1 {
     font-size: 35px;
@@ -85,7 +119,7 @@ display: block;
     transition: all 0.3s ease-in-out;
     border: none;
     color: #fff;
-      background-color: #d8a051;
+    background-color: #d8a051;
 
     &:hover,
     &:focus {
@@ -103,6 +137,8 @@ const Error = styled.h4`
 `;
 
 const PaymentsSection = styled.div`
+  margin-top: 2rem;
+
   h3 {
     font-size: 20px;
     font-weight: 400;
@@ -177,7 +213,6 @@ const FormContactSection = styled.div`
 `;
 
 const FormContainer = () => {
-  // const [purchasePrice, setPurchasePrice] = useState('');
   const [purchasePrice, setPurchasePrice] = useLocaleStorage(
     'purchasePrice',
     '',
@@ -193,6 +228,7 @@ const FormContainer = () => {
   const [bank, setBank] = useLocaleStorage('bank', '');
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   let path = location.pathname.split('/');
 
@@ -212,17 +248,6 @@ const FormContainer = () => {
       calculateValues();
     }
   };
-
-  // const handleDownPayment = e => {
-  //   if (
-  //     e.target.value > purchasePrice * 0.2 &&
-  //     e.target.value < purchasePrice
-  //   ) {
-  //     setDownPayment(e.target.value);
-  //   } else {
-  //     return;
-  //   }
-  // };
 
   const calculateValues = () => {
     let borrow = purchasePrice - downPayment;
@@ -252,7 +277,6 @@ const FormContainer = () => {
 
   const hundleChange = e => {
     const { name, value } = e.currentTarget;
-    console.log('name', name);
 
     switch (name) {
       case 'purchasePrice':
@@ -282,7 +306,7 @@ const FormContainer = () => {
 
   const hundleSubmit = e => {
     e.preventDefault();
-    const contact = {
+    const client = {
       id: nanoid(),
       purchasePrice,
       downPayment,
@@ -291,7 +315,7 @@ const FormContainer = () => {
       numberUser,
       bank: path[2],
     };
-    dispatch(contactsActions.addContact(contact));
+    dispatch(clientsActions.addClient(client));
     reset();
   };
 
@@ -305,10 +329,16 @@ const FormContainer = () => {
     document.getElementById('form').reset();
   };
 
-  console.log('bank', bank);
-
   return (
     <Container>
+      <button
+        className="button-goback"
+        type="button"
+        onClick={() => navigate(-1)}
+      >
+        <ImArrowLeft className="button-goback-icon" />
+        Go back
+      </button>
       <h1>Mortgage Calculator {path[2]}</h1>
       <form id="form" onSubmit={hundleSubmit}>
         <InputSection>
@@ -336,10 +366,10 @@ const FormContainer = () => {
           <Error>{loanArp.error}</Error>
           <input name="loanArp" onChange={hundleChange} type="text" />
         </InputSection>
-        <SubmitButton onClick={e => submitCalculation(e)}>
-          Calculate
-        </SubmitButton>
         <PaymentsSection>
+          <SubmitButton onClick={e => submitCalculation(e)}>
+            Calculate
+          </SubmitButton>
           <h3>
             Estimated Monthly Payments:{' '}
             {numeral(monthlyPayment).format('$0,0.00')}
@@ -347,7 +377,7 @@ const FormContainer = () => {
         </PaymentsSection>
         <FormContactSection>
           <div>
-            <h3>Введіть номер свого мобільного телефону для консультації</h3>
+            <h3>Enter your phone number for consultation</h3>
             <input
               name="numberUser"
               onChange={hundleChange}
@@ -355,7 +385,7 @@ const FormContainer = () => {
               placeholder="+38(011)-111-11-11"
             />
           </div>
-          <button type="submit">Відправити</button>
+          <button type="submit">Send</button>
         </FormContactSection>
       </form>
     </Container>
