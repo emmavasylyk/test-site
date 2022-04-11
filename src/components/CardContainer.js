@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Otpbank from './Images/optbank.jpg';
+import Privat from './Images/privat.png';
+import Raiffeisen from './Images/raiffeisenbank.png';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -73,17 +76,23 @@ const DetailsSection = styled.div`
     font-size: 18px;
     font-weight: 500;
     text-transform: uppercase;
-    color: #fff;
-    background-color: #2a6279;
     margin: 0 auto;
     padding: 15px;
     border-radius: 5px;
     cursor: pointer;
-    outline: #fff
+    outline: #fff;
+    color: #2a6279;
+    background-color: #fff;
 
-    &:hover {
-      color: #2a6279;
-      background-color: #fff;
+    &:hover,
+    &:focus {
+      color: #fff;
+      background-color: #d8a051;
+    }
+
+    a {
+      text-decoration: none;
+      color: currentColor;
     }
   }
 `;
@@ -91,30 +100,43 @@ const DetailsSection = styled.div`
 const CardContainer = () => {
   return (
     <Container>
-      <h1>Hello worlds!</h1>
+      <h1>Hello client!</h1>
       <CardsWrapper>
         <CardSection>
           <InfoSection>
             <img src={Otpbank} alt="Otpbank logo" />
-            <h3>Срочный</h3>
-            <p>6,00% в гривне</p>
+            <h3>Іпотека під 7%</h3>
+            <p>9,50% в гривне</p>
           </InfoSection>
-
           <DetailsSection>
-            <button type="button">Узнать подробнее</button>
+            <button type="button">
+              <Link to="/calculator/otpbank">Узнать подробнее</Link>
+            </button>
           </DetailsSection>
         </CardSection>
         <CardSection>
-          <img src={Otpbank} alt="Otpbank logo" />
-          <h3>Срочный</h3>
-          <h3>6,00% в гривне</h3>
-          <div></div>
+          <InfoSection>
+            <img src={Privat} alt="Privat logo" height={108} />
+            <h3>Іпотека під 7%</h3>
+            <p>6,00% в гривне</p>
+          </InfoSection>
+          <DetailsSection>
+            <button type="button">
+              <Link to="/calculator/privat24">Узнать подробнее</Link>
+            </button>
+          </DetailsSection>
         </CardSection>
         <CardSection>
-          <img src={Otpbank} alt="Otpbank logo" />
-          <h3>Срочный</h3>
-          <h3>6,00% в гривне</h3>
-          <div></div>
+          <InfoSection>
+            <img src={Raiffeisen} alt="Raiffeisen logo" height={108} />
+            <h3>Іпотека під 8%</h3>
+            <p>9,25% в гривне</p>
+          </InfoSection>
+          <DetailsSection>
+            <button type="button">
+              <Link to="/calculator/raiffeisen">Узнать подробнее</Link>
+            </button>
+          </DetailsSection>
         </CardSection>
       </CardsWrapper>
     </Container>
