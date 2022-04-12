@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import backgroundImg from './image/background.jpg';
 import FormContainer from './components/FormContainer';
 import CardContainer from './components/CardContainer';
+import FormListClient from './components/FormListClient';
 
 const Container = styled.div`
   background: url(${backgroundImg});
@@ -23,6 +24,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<CardContainer />} />
           <Route path="calculator/*" element={<FormContainer />} />
+          <Route path="list" element={<FormListClient />} />
         </Routes>
       </BrowserRouter>
     </Container>

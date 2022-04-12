@@ -10,7 +10,7 @@ const initialClient = [
     loanTerm: 5,
     loanArp: 20,
     numberUser: '+38025-459-12-56',
-    bank: 'opt',
+    bankName: 'opt',
   },
 ];
 

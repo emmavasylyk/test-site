@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid';
 import { useDispatch } from 'react-redux';
 import clientsActions from '../redux/client/client-actions';
 import { ImArrowLeft } from 'react-icons/im';
+import FormListClient from './FormListClient';
 
 const Container = styled.div`
   display: flex;
@@ -28,11 +29,11 @@ const Container = styled.div`
     font-weight: 500;
     text-transform: uppercase;
     margin: 0 auto;
-    padding: 15px;
+    padding: 12px;
     border-radius: 5px;
     cursor: pointer;
     width: 200px;
-    height: 68px;
+    height: 50px;
     box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
       0 6px 6px -1px rgba(8, 11, 14, 0.1);
     transition: all 0.3s ease-in-out;
@@ -108,12 +109,12 @@ display: block;
     font-weight: 500;
     text-transform: uppercase;
     margin: 0 auto;
-    padding: 15px;
+    padding: 12px;
     border-radius: 5px;
     cursor: pointer;
     outline: #fff;
     width: 200px;
-    height: 68px;
+    height: 50px;
     box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
       0 6px 6px -1px rgba(8, 11, 14, 0.1);
     transition: all 0.3s ease-in-out;
@@ -145,7 +146,7 @@ const PaymentsSection = styled.div`
     line-height: 28px;
     margin-top: 3rem;
     background: #fff;
-    padding: 3rem;
+    padding: 1rem;
     color: #2a6279;
     box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
       0 6px 6px -1px rgba(8, 11, 14, 0.1);
@@ -169,12 +170,12 @@ const FormContactSection = styled.div`
     font-weight: 500;
     text-transform: uppercase;
     margin: 0 auto;
-    padding: 15px;
+    padding: 12px;
     border-radius: 5px;
     cursor: pointer;
     outline: #fff;
     width: 200px;
-    height: 68px;
+    height: 50px;
     box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
       0 6px 6px -1px rgba(8, 11, 14, 0.1);
     transition: all 0.3s ease-in-out;
@@ -197,10 +198,10 @@ const FormContactSection = styled.div`
   }
 
   input {
-    height: 68px;
+    height: 50px;
     font-size: 25px;
     width: 450px;
-    padding: 15px;
+    padding: 12px;
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.6);
     border: none;
@@ -225,10 +226,21 @@ const FormContainer = () => {
     0.0,
   );
   const [numberUser, setNumberUser] = useLocaleStorage('numberUser', '');
-  const [bank, setBank] = useLocaleStorage('bank', '');
+  // const [bank, setBank] = useLocaleStorage('bank', '');
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const banks = ['choose bank', 'Otpbank', 'Privat 24', 'Raiffeisen'];
+  const [bankName, setBankName] = useLocaleStorage('bankName', '');
+
+  const options = banks.map((bank, index) => {
+    return (
+      <option key={index} value={bank}>
+        {bank}
+      </option>
+    );
+  });
 
   let path = location.pathname.split('/');
 
@@ -299,6 +311,10 @@ const FormContainer = () => {
         setNumberUser(value);
         break;
 
+      case 'bankName':
+        setBankName(value);
+        break;
+
       default:
         return;
     }
@@ -313,7 +329,8 @@ const FormContainer = () => {
       loanTerm,
       loanArp,
       numberUser,
-      bank: path[2],
+      bankName,
+      // bank: path[2],
     };
     dispatch(clientsActions.addClient(client));
     reset();
@@ -325,6 +342,7 @@ const FormContainer = () => {
     setLoanTerm(' ');
     setLoanArp(' ');
     setMonthlyPayment(0.0);
+    setBankName(' ');
     setNumberUser(' ');
     document.getElementById('form').reset();
   };
@@ -341,6 +359,10 @@ const FormContainer = () => {
       </button>
       <h1>Mortgage Calculator {path[2]}</h1>
       <form id="form" onSubmit={hundleSubmit}>
+        <select value={bankName} name="bankName" onChange={hundleChange}>
+          {options}
+        </select>
+        <p>ваш выбор: {banks[bankName]}</p>
         <InputSection>
           <label>Purchase Price ($)</label>
           <Error>{purchasePrice.error}</Error>
@@ -376,7 +398,7 @@ const FormContainer = () => {
           </h3>
         </PaymentsSection>
         <FormContactSection>
-          <div>
+          {/* <div>
             <h3>Enter your phone number for consultation</h3>
             <input
               name="numberUser"
@@ -384,10 +406,11 @@ const FormContainer = () => {
               type="tel"
               placeholder="+38(011)-111-11-11"
             />
-          </div>
+          </div> */}
           <button type="submit">Send</button>
         </FormContactSection>
       </form>
+      <FormListClient />
     </Container>
   );
 };
