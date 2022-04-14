@@ -18,6 +18,9 @@ const items = createReducer(initialClient, {
   [actions.addClient]: (state, { payload }) => {
     return [...state, payload];
   },
+
+  [actions.deleteClient]: (state, { payload }) =>
+    state.filter(({ id }) => id !== payload),
 });
 
 export default combineReducers({
