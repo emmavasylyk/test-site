@@ -17,6 +17,12 @@ const ListHeader = styled.ul`
   display: flex;
   justify-content: space-around;
   list-style: none;
+  height: 48px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #d8a051;
 `;
 
 const ListBody = styled.ul`
@@ -26,6 +32,7 @@ const ListBody = styled.ul`
     justify-content: space-around;
     height: 40px;
     align-items: center;
+    color: #2a6279;
   }
   .purchasePrice {
     width: 100px;
@@ -44,7 +51,7 @@ const ListBody = styled.ul`
     width: 72px;
   }
   li:nth-child(even) {
-    background: #cbcbcb;;
+    background: #e7e7e7;
   }
 
   button {
@@ -66,31 +73,18 @@ const ListBody = styled.ul`
 
 const FormListClient = () => {
   const clients = useSelector(getVisibleClient);
-  console.log('clients', clients);
   const dispatch = useDispatch();
   const onDeleteClient = id => dispatch(clientsActions.deleteClient(id));
 
   return (
     <Container>
       <ListHeader>
-        <li>
-          <div>Purchase Price</div>
-        </li>
-        <li>
-          <div>Down Payment</div>
-        </li>
-        <li>
-          <div>Loan Term</div>
-        </li>
-        <li>
-          <div>Loan Arp</div>
-        </li>
-        <li>
-          <div>Bank</div>
-        </li>
-        <li>
-          <div></div>
-        </li>
+        <li>Purchase Price</li>
+        <li>Down Payment</li>
+        <li>Loan Term</li>
+        <li>Loan Arp</li>
+        <li>Bank</li>
+        <li></li>
       </ListHeader>
       <ListBody>
         {clients.map(

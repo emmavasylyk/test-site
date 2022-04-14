@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import numeral from 'numeral';
 import { useLocaleStorage } from '../hooks/useLocaleStorage';
@@ -14,7 +14,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 3rem 0;
   max-width: 900px;
   margin: auto;
 
@@ -65,6 +64,35 @@ const Container = styled.div`
     align-items: center;
     flex-wrap: wrap;
     margin-top: 1rem;
+    margin-bottom: 60px;
+  }
+  .text-select{
+    margin-bottom:15px;
+  }
+  select{
+    background: rgba(255, 255, 255, 0.6);
+    height: 48px;
+    border: none;
+    border-radius: 1rem;
+    padding: 0 1rem;
+    color: #2a6279;
+    font-weight: 500;
+    box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
+      0 6px 6px -1px rgba(8, 11, 14, 0.1);
+    transition: all 0.3s ease-in-out;
+
+    &:hover,
+    &:focus {
+      box-shadow: 0 0 1px 0 rgba(8, 11, 14, 0.06),
+        0 16px 16px -1px rgba(8, 11, 14, 0.1);
+    }
+
+  }
+  .wrapper-input{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -226,12 +254,10 @@ const FormContainer = () => {
     0.0,
   );
   const [numberUser, setNumberUser] = useLocaleStorage('numberUser', '');
-  // const [bank, setBank] = useLocaleStorage('bank', '');
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const banks = ['choose bank', 'Otpbank', 'Privat 24', 'Raiffeisen'];
+  const banks = ['', 'Otpbank', 'Privat 24', 'Raiffeisen'];
   const [bankName, setBankName] = useLocaleStorage('bankName', '');
 
   const options = banks.map((bank, index) => {
@@ -241,8 +267,6 @@ const FormContainer = () => {
       </option>
     );
   });
-
-  let path = location.pathname.split('/');
 
   const submitCalculation = async e => {
     e.preventDefault();
@@ -330,7 +354,6 @@ const FormContainer = () => {
       loanArp,
       numberUser,
       bankName,
-      // bank: path[2],
     };
     dispatch(clientsActions.addClient(client));
     reset();
@@ -357,46 +380,51 @@ const FormContainer = () => {
         <ImArrowLeft className="button-goback-icon" />
         Go back
       </button>
-      <h1>Mortgage Calculator {path[2]}</h1>
+      <h1>Mortgage Calculator</h1>
       <form id="form" onSubmit={hundleSubmit}>
-        <select value={bankName} name="bankName" onChange={hundleChange}>
-          {options}
-        </select>
-        <p>ваш выбор: {banks[bankName]}</p>
-        <InputSection>
-          <label>Purchase Price ($)</label>
-          <Error>{purchasePrice.error}</Error>
-          <input name="purchasePrice" onChange={hundleChange} type="text" />
-        </InputSection>
-        <InputSection>
-          <label>Down Payment ($)</label>
-          <Error>{downPayment.error}</Error>
-          <input
-            placeholder="Please enter at least 20% of purchase price"
-            name="downPayment"
-            onChange={hundleChange}
-            type="text"
-          />
-        </InputSection>
-        <InputSection>
-          <label>Loan Term (years)</label>
-          <Error>{loanTerm.error}</Error>
-          <input name="loanTerm" onChange={hundleChange} type="text" />
-        </InputSection>
-        <InputSection>
-          <label>APR (%)</label>
-          <Error>{loanArp.error}</Error>
-          <input name="loanArp" onChange={hundleChange} type="text" />
-        </InputSection>
-        <PaymentsSection>
-          <SubmitButton onClick={e => submitCalculation(e)}>
-            Calculate
-          </SubmitButton>
-          <h3>
-            Estimated Monthly Payments:{' '}
-            {numeral(monthlyPayment).format('$0,0.00')}
-          </h3>
-        </PaymentsSection>
+        <div>
+          <p className="text-select">Choose bank: {banks[bankName]}</p>
+          <select value={bankName} name="bankName" onChange={hundleChange}>
+            {options}
+          </select>
+        </div>
+        <div className="wrapper-input">
+          <InputSection>
+            <label>Purchase Price ($)</label>
+            <Error>{purchasePrice.error}</Error>
+            <input name="purchasePrice" onChange={hundleChange} type="text" />
+          </InputSection>
+          <InputSection>
+            <label>Down Payment ($)</label>
+            <Error>{downPayment.error}</Error>
+            <input
+              placeholder="Please enter at least 20% of purchase price"
+              name="downPayment"
+              onChange={hundleChange}
+              type="text"
+            />
+          </InputSection>
+          <InputSection>
+            <label>Loan Term (years)</label>
+            <Error>{loanTerm.error}</Error>
+            <input name="loanTerm" onChange={hundleChange} type="text" />
+          </InputSection>
+          <InputSection>
+            <label>APR (%)</label>
+            <Error>{loanArp.error}</Error>
+            <input name="loanArp" onChange={hundleChange} type="text" />
+          </InputSection>
+
+          <PaymentsSection>
+            <SubmitButton onClick={e => submitCalculation(e)}>
+              Calculate
+            </SubmitButton>
+            <h3>
+              Estimated Monthly Payments:{' '}
+              {numeral(monthlyPayment).format('$0,0.00')}
+            </h3>
+          </PaymentsSection>
+        </div>
         <FormContactSection>
           {/* <div>
             <h3>Enter your phone number for consultation</h3>
